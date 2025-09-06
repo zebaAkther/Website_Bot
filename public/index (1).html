@@ -1,15 +1,476 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Your App Title</title>
-    <!-- Place for favicon, fonts, CSS links -->
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <!-- React will mount your app inside this div -->
-    <div id="root"></div>
-  </body>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PragyanAI - Grow with Gyan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .hero-bg {
+            background-color: #1e3a8a; /* indigo-900 */
+        }
+
+        /* Chatbot Styles */
+        #chat-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #fb923c; /* orange-400 */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px_12px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            z-index: 1000;
+        }
+        #chat-bubble:hover {
+            transform: scale(1.1);
+        }
+        #chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+        }
+        .chat-header {
+            background-color: #1e3a8a; /* indigo-900 */
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f1f5f9; /* slate-100 */
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 85%;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+        .message.user {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            align-self: flex-end;
+        }
+        .message.bot, .message.loading {
+            background-color: #e2e8f0; /* slate-200 */
+            color: #1e293b; /* slate-800 */
+            align-self: flex-start;
+        }
+        .message.loading {
+            font-style: italic;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #cbd5e1; /* slate-300 */
+            background-color: #fff;
+        }
+        .chat-input input {
+            flex-grow: 1;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            border-radius: 20px;
+            padding: 10px 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .chat-input input:focus {
+             border-color: #3b82f6; /* blue-500 */
+        }
+        .chat-input button {
+            background-color: #1e3a8a; /* indigo-900 */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.2s;
+        }
+         .chat-input button:hover {
+            background-color: #312e81; /* indigo-800 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-700">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-indigo-900">
+                PRAGYAN<span class="text-orange-500">AI</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-gray-600 hover:text-indigo-700">About Us</a>
+                <a href="#programs" class="text-gray-600 hover:text-indigo-700">AI Programs</a>
+                <a href="#why-us" class="text-gray-600 hover:text-indigo-700">Why PragyanAI</a>
+                <a href="#contact" class="text-gray-600 hover:text-indigo-700">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <!-- Mobile Menu Button can be added here -->
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white">
+        <div class="container mx-auto px-6 py-24 text-center">
+            <h1 class="text-5xl font-extrabold mb-4">Grow with Gyan</h1>
+            <p class="text-xl text-indigo-200">Unlock your potential with our industry-leading AI and Data Science programs.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-16">
+
+        <!-- About Us Section -->
+        <section id="about" class="mb-20">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">About PragyanAI</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">We are an AI company in the education, product development, and consulting space, dedicated to enabling companies with highly skilled resources and helping them adopt AI to compete globally.</p>
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-indigo-800 mb-2">S</h3>
+                    <h4 class="text-lg font-semibold mb-2">Student Centric</h4>
+                    <p class="text-sm text-gray-600">We continuously elevate the student experience, keeping their success and well-being our top priority.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-indigo-800 mb-2">O</h3>
+                    <h4 class="text-lg font-semibold mb-2">One World, One Family</h4>
+                    <p class="text-sm text-gray-600">Guided by "Vasudhaiva Kutumbakam," we cultivate an ethical, interconnected mindset.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-indigo-800 mb-2">U</h3>
+                    <h4 class="text-lg font-semibold mb-2">"Unus pro omnibus..."</h4>
+                    <p class="text-sm text-gray-600">We embrace unity and mutual support within our diverse, and inclusive community.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-indigo-800 mb-2">L</h3>
+                    <h4 class="text-lg font-semibold mb-2">Lifelong Learning</h4>
+                    <p class="text-sm text-gray-600">We are lifelong learners who build human-centric solutions to address real-world challenges.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Programs Section -->
+        <section id="programs" class="mb-20">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Our AI Programs</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">We offer a range of comprehensive programs tailored to students and working professionals at every stage of their career.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Long Term Program Card -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-indigo-800 mb-2">Long Term Programs</h3>
+                        <p class="text-gray-600 mb-4">Advance PG Certificate in Data Science, AI, & Generative AI for 2nd, 3rd, and final year students.</p>
+                        <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">18-30 Months</span>
+                         <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Stipend</span>
+                    </div>
+                </div>
+                <!-- Short Term Program Card -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-indigo-800 mb-2">Short Term Programs</h3>
+                        <p class="text-gray-600 mb-4">6-month executive programs in Data Analytics, AI, and Generative AI for students and professionals.</p>
+                        <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">6 Months</span>
+                         <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Professionals</span>
+                    </div>
+                </div>
+                <!-- Unique Program Card -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-indigo-800 mb-2">Unique Programs</h3>
+                        <p class="text-gray-600 mb-4">Specialized programs like our "Super 30" in Generative AI and our parallel practical engineering program.</p>
+                        <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Specialized</span>
+                         <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Selective</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why PragyanAI Section -->
+        <section id="why-us" class="mb-20">
+             <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">The PragyanAI Advantage</h2>
+             <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Our unique 10X Strategy and industry integration ensure our students are not just job-ready, but future leaders.</p>
+             <div class="bg-white p-8 rounded-lg shadow-xl">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-indigo-800 mb-4">For Students: The 10X Strategy</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> In-depth Teaching & Comprehensive Hours</li>
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> 50-100+ Case Studies & Mini-Projects</li>
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> Peer Learning to build confidence and communication</li>
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> Monthly AI Project Demos & AI Explorer events</li>
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> 6 Month Industry Immersion with Stipend & Experience Letter</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-indigo-800 mb-4">For Recruiters: Hire Better, Faster</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> Hire skilled talent in 3 hours, ready for immediate joining.</li>
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> Pre-vetted candidates with a very low 2-3:1 interview-to-hire ratio.</li>
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> No additional training needed; corporate culture exposure included.</li>
+                            <li class="flex items-start"><span class="text-green-500 mr-2">✔</span> Zero dropouts and a 95% retention rate after 1 year.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Get In Touch</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Have questions about our programs or partnerships? Reach out to us!</p>
+            <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg text-center">
+                <p class="text-lg mb-2"><strong>Master Trainer:</strong> Sateesh Ambesange</p>
+                <p class="text-gray-600 mb-4">25+ years of industry, academic, and research experience.</p>
+                <p class="mb-2"><strong>Email:</strong> <a href="mailto:pragyan.ai.school@gmail.com" class="text-indigo-600 hover:underline">pragyan.ai.school@gmail.com</a></p>
+                <p class="mb-4"><strong>Phone:</strong> <a href="tel:+919741007422" class="text-indigo-600 hover:underline">+91-9741007422</a></p>
+                <a href="https://www.linkedin.com/in/sateesh-ambesange-3020185/" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition">
+                    Connect on LinkedIn
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-indigo-900 text-white mt-20">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 PragyanAI. All Rights Reserved.</p>
+            <p class="text-sm text-indigo-300">Grow with Gyan</p>
+        </div>
+    </footer>
+
+    <!-- LLM Bot Interface -->
+    <!-- This is the floating chat bubble -->
+    <div id="chat-bubble">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16">
+            <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Zm4.542-.827a.25.25 0 0 0 .217.065l.92.061a.25.25 0 0 0 .217-.065l2.165-1.557a.25.25 0 0 0 .028-.359l-.028-.035a.25.25 0 0 0-.359-.028l-1.637 1.177-.852-.057a.25.25 0 0 0-.217.065l-2.165 1.557a.25.25 0 0 0-.028.359l.028.035a.25.25 0 0 0 .359.028l1.637-1.177Z"/>
+            <path d="M4.5 1a.5.5 0 0 1 .5.5V3h6V1.5a.5.5 0 0 1 1 0V3h1v1h-11V3h1V1.5a.5.5 0 0 1 .5-.5ZM13 13V4H3v9h10Zm-5-7c1.657 0 3 1.119 3 2.5v1.217c0 .266-.145.51-.38.654-.066.04-.15.074-.236.101l-1.331.244a.498.498 0 0 1-.502-.032l-.94-1.002a.498.498 0 0 1-.033-.502l.244-1.332a.933.933 0 0 1 .102-.236c.144-.236.654-.38.654-.38V6.5Zm-1.5 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z"/>
+        </svg>
+    </div>
+
+    <!-- This is the chat window that opens -->
+    <div id="chat-window">
+        <div class="chat-header">PragyanAI Assistant</div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot">Hello! How can I help you today?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button id="send-btn">➤</button>
+        </div>
+    </div>
+   
+    <script>
+        // --- Chatbot JavaScript ---
+        const chatBubble = document.getElementById('chat-bubble');
+        const chatWindow = document.getElementById('chat-window');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+       
+        // IMPORTANT: This URL points to your Render backend.
+        const backendUrl = 'https://fastapi-groq-backend.onrender.com/chat';
+
+        chatBubble.addEventListener('click', () => {
+            const isHidden = chatWindow.style.display === 'none' || chatWindow.style.display === '';
+            chatWindow.style.display = isHidden ? 'flex' : 'none';
+        });
+
+        const sendMessage = async () => {
+            const userMessage = userInput.value.trim();
+            if (userMessage === '') return;
+
+            addMessage(userMessage, 'user');
+            userInput.value = '';
+            userInput.focus();
+
+            const loadingMessage = addMessage('...', 'loading');
+
+            try {
+                const response = await fetch(backendUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: userMessage })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const botMessage = data.response;
+               
+                loadingMessage.remove();
+                addMessage(botMessage, 'bot');
+
+            } catch (error) {
+                loadingMessage.remove();
+                addMessage('Sorry, I am having trouble connecting. Please try again later.', 'bot');
+                console.error('Error fetching response:', error);
+            }
+        };
+
+        const addMessage = (text, type) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+            messageElement.textContent = text;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageElement;
+        };
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+
+</body>
 </html>
+Hide quoted text
+
+On Sat, Sep 6, 2025 at 11:23 AM Pragyan AI and DS School <pragyan.ai.school@gmail.com> wrote:
+import os
+import sqlite3
+import requests
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+# --- Configuration ---
+DB_FILE = "qna.db"
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise Exception("GROQ_API_KEY environment variable not set!")
+
+# --- Database Setup ---
+def setup_database():
+    """Creates the database and table if they don't exist."""
+    conn = sqlite3.connect(DB_FILE)
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS qna (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+            answer TEXT NOT NULL,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def log_qa(question: str, answer: str):
+    """Logs a question and its answer to the SQLite database."""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO qna (question, answer) VALUES (?, ?)", (question, answer))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Error logging to database: {e}")
+
+# --- FastAPI App Initialization ---
+app = FastAPI()
+
+@app.on_event("startup")
+async def startup_event():
+    """Run database setup on application startup."""
+    setup_database()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class ChatRequest(BaseModel):
+    prompt: str
+
+# --- Groq LLM Helper ---
+def query_groq_llm(question: str) -> str:
+    """Sends a question to the Groq API and returns the answer."""
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct", # Using the same model as before for consistency
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": question},
+        ],
+        "temperature": 0.5,
+    }
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()  # Raises an exception for bad status codes (4xx or 5xx)
+        return response.json()['choices'][0]['message']['content']
+    except requests.exceptions.RequestException as e:
+        print(f"Error calling Groq API: {e}")
+        raise HTTPException(status_code=500, detail=f"Error communicating with Groq API: {e}")
+
+
+# --- API Endpoints ---
+@app.get("/")
+def read_root():
+    return {"message": "Groq Chatbot is Running!"}
+
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    """
+    Receives a prompt, gets a completion from Groq, logs the interaction,
+    and returns the response.
+    """
+    answer = query_groq_llm(request.prompt)
+    log_qa(request.prompt, answer)
+    return {"response": answer}
+
+@app.get("/history")
+async def history():
+    """Retrieves the last 50 Q&A pairs from the database."""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cur = conn.cursor()
+        # Fetch the most recent 50 entries
+        cur.execute("SELECT question, answer, timestamp FROM qna ORDER BY id DESC LIMIT 50")
+        rows = cur.fetchall()
+        conn.close()
+        return [{"question": q, "answer": a, "timestamp": t} for q, a, t in rows]
+    except Exception as e:
+        print(f"Error fetching history from database: {e}")
+        raise HTTPException(status_code=500, detail="Could not retrieve chat history.")
