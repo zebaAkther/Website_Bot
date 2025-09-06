@@ -140,7 +140,7 @@ const styles = {
     display: "flex",
     borderTop: "1px solid #ddd",
     padding: "1rem",
-    backgroundColor: "#f7f7f7",
+    backgroundColor: "#FFC0CB",
   },
   input: {
     flexGrow: 1,
