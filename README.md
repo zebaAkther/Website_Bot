@@ -48,17 +48,6 @@ export GROQ_API_KEY="your_groq_api_key_here" # Or set in your environment variab
 uvicorn main:app --reload
 
 
-## Project Structure
-/frontend
-├── src
-│ ├── App.js # Main React Chat UI component
-│ ├── assets # Avatars and image assets
-│ ├── index.js # React app entry point
-│ └── index.css # Global styles (optional)
-/backend
-├── main.py # FastAPI backend server code
-├── qna.db # SQLite database file (created at runtime)
-└── requirements.txt # Python dependencies
 
 
 ---
