@@ -35,4 +35,74 @@ A full-stack AI chatbot application built with React frontend and FastAPI backen
 ### Installation
 
 #### Frontend
+cd frontend
+npm install
+npm start
+
+
+#### Backend
+
+cd backend
+pip install -r requirements.txt
+export GROQ_API_KEY="your_groq_api_key_here" # Or set in your environment variables
+uvicorn main:app --reload
+
+
+## Project Structure
+/frontend
+├── src
+│ ├── App.js # Main React Chat UI component
+│ ├── assets # Avatars and image assets
+│ ├── index.js # React app entry point
+│ └── index.css # Global styles (optional)
+/backend
+├── main.py # FastAPI backend server code
+├── qna.db # SQLite database file (created at runtime)
+└── requirements.txt # Python dependencies
+
+
+---
+
+## Usage
+
+- Open the frontend React app in your browser.
+- Type your questions in the chat input box.
+- AI responses will appear in real time.
+- Dark mode toggle is available in the header.
+- Provide feedback on AI answers with thumbs up/down.
+
+---
+
+## Environment Variables
+
+- `GROQ_API_KEY` — Your API key to access the Groq LLM service.  
+  Make sure to keep it secret and do not expose it in public repositories.
+
+---
+
+## Deployment
+
+You can deploy the frontend and backend separately:
+
+- Frontend on platforms like Netlify, Vercel, or Render static hosting.
+- Backend on Render, Heroku, AWS, or other cloud servers supporting Python FastAPI.
+
+Configure environment variables and update the API URLs in frontend accordingly.
+
+---
+
+## Contributing
+
+Contributions welcome! Please open issues or pull requests on GitHub.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+
+
 
