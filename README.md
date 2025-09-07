@@ -2,6 +2,7 @@
 
 A full-stack AI chatbot application built with React frontend and FastAPI backend, powered by Groq's LLM API. This project enables interactive real-time conversations with an AI assistant, storing chat history in a lightweight SQLite database.
 
+<img width="1440" height="900" alt="Screenshot 2025-09-06 at 1 05 45 PM" src="https://github.com/user-attachments/assets/16433126-59bc-48c4-9b81-71e4a6e60acd" />
 
 
 ## Features
